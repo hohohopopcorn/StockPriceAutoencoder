@@ -24,15 +24,15 @@ class stockAutoencoder():
         # encoder
         encoding = Conv2D(64, (3, 3), activation='relu', padding='same')(input)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
-        encoding = Conv2D(64, (3, 3), activation='relu', padding='same')(encoding)
-        encoding = MaxPooling2D((2, 2), padding='same')(encoding)
         encoding = Conv2D(32, (3, 3), activation='relu', padding='same')(encoding)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
-        encoding = Conv2D(32, (3, 3), activation='relu', padding='same')(encoding)
+        encoding = Conv2D(16, (3, 3), activation='relu', padding='same')(encoding)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
         encoding = Conv2D(8, (3, 3), activation='relu', padding='same')(encoding)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
-        encoding = Conv2D(4, (3, 3), activation='relu', padding='same', name='latent_layer')(encoding)
+        encoding = Conv2D(4, (3, 3), activation='relu', padding='same')(encoding)
+        encoding = MaxPooling2D((2, 2), padding='same')(encoding)
+        encoding = Conv2D(2, (3, 3), activation='relu', padding='same', name='latent_layer')(encoding)
         
         return encoding
 
@@ -93,7 +93,7 @@ class stockAutoencoder():
     def _callback_(self, evalstocks=['GE', 'MMM'], ext='.pst.npy'):
         for s in evalstocks:
             testDir = "../Data/" + s + "/" + s + "_test/"
-            datautils.plot_sample(self.autoencoder, testDir, ext, num=20)
+            datautils.plot_sample(self.autoencoder, testDir, ext, num=10)
 
 if __name__ == '__main__':
     import numpy as np
@@ -129,5 +129,5 @@ if __name__ == '__main__':
     
     for s in evalstocks:
         testDir = "../Data/" + s + "/" + s + "_test/"
-        datautils.plot_sample(model, testDir,'.pst.npy', num=20)
+        datautils.plot_sample(model, testDir,'.pst.npy', num=10)
         
