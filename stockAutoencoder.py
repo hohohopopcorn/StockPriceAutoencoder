@@ -22,31 +22,31 @@ class stockAutoencoder():
 
     def encoder_architecture(self, input):
         # encoder
-        encoding = Conv2D(64, (3, 3), activation='relu', padding='same')(input)
+        encoding = Conv2D(8, (4, 4), activation='relu', padding='same')(input)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
-        encoding = Conv2D(32, (3, 3), activation='relu', padding='same')(encoding)
+        encoding = Conv2D(16, (4, 4), activation='relu', padding='same')(encoding)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
-        encoding = Conv2D(16, (3, 3), activation='relu', padding='same')(encoding)
+        encoding = Conv2D(32, (4, 4), activation='relu', padding='same')(encoding)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
-        encoding = Conv2D(8, (3, 3), activation='relu', padding='same')(encoding)
+        encoding = Conv2D(16, (4, 4), activation='relu', padding='same')(encoding)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
-        encoding = Conv2D(4, (3, 3), activation='relu', padding='same')(encoding)
+        encoding = Conv2D(8, (4, 4), activation='relu', padding='same')(encoding)
         encoding = MaxPooling2D((2, 2), padding='same')(encoding)
-        encoding = Conv2D(2, (3, 3), activation='relu', padding='same', name='latent_layer')(encoding)
+        encoding = Conv2D(1, (4, 4), activation='sigmoid', padding='same', name='latent_layer')(encoding)
         
         return encoding
 
     def decoder_architecture(self, input):
         # decoder
-        decoding = Conv2D(8, (3, 3), activation='relu', padding='same')(input)
-        decoding = UpSampling2D((2, 2))(decoding)
-        decoding = Conv2D(16, (3, 3), activation='relu', padding='same')(decoding)
+        decoding = Conv2D(16, (2, 2), activation='relu', padding='same')(input)
         decoding = UpSampling2D((2, 2))(decoding)
         decoding = Conv2D(32, (3, 3), activation='relu', padding='same')(decoding)
         decoding = UpSampling2D((2, 2))(decoding)
-        decoding = Conv2D(64, (3, 3), activation='relu', padding='same')(decoding)
+        decoding = Conv2D(64, (4, 4), activation='relu', padding='same')(decoding)
         decoding = UpSampling2D((2, 2))(decoding)
-        decoding = Conv2D(64, (3, 3), activation='relu', padding='same')(decoding)
+        decoding = Conv2D(32, (3, 3), activation='relu', padding='same')(decoding)
+        decoding = UpSampling2D((2, 2))(decoding)
+        decoding = Conv2D(16, (2, 2), activation='relu', padding='same')(decoding)
         decoding = UpSampling2D((2, 2))(decoding)
         decoding = Conv2D(1, (3, 3), activation='sigmoid', padding='same', name='decoder_output')(decoding)
 
@@ -116,7 +116,7 @@ if __name__ == '__main__':
         
     model = stockAutoencoder(optimizer='adagrad')
     try:
-        m, history = model.train(traindata, epochs=1000, batch=8)
+        m, history = model.train(traindata, epochs=500, batch=4)
         if history is not None:
             hist = zip(history.history['val_loss'], history.history['val_acc'])
             hist = np.array(hist)
