@@ -7,28 +7,35 @@ import matplotlib
 import matplotlib.pyplot as plt
 matplotlib.use('TKAgg', warn=False)
 from skimage import color
+from math import log
 import win_unicode_console
 win_unicode_console.enable()
 
 history = 20
-forecast = 20
+forecast = 5
 FACTORS = 2
 width = 128
 height = width
 stocks = ["MMM", "GE"]
 modes = ["train", "test"]
 
+# def normalize(arr):
+#     maximum = []
+#     minimum = []
+#     for i in range(len(arr[0])):
+#         temp = [arr[j][i] for j in range(len(arr))]
+#         maximum += [max(temp)]
+#         minimum += [min(temp)]
+#     copy = []
+#     for j in range(len(arr)):
+#         copy.append([(arr[j][i] - minimum[i]) / (maximum[i] - minimum[i])
+#                      for i in range(len(arr[j]))])
+#     return copy
+
 def normalize(arr):
-    maximum = []
-    minimum = []
-    for i in range(len(arr[0])):
-        temp = [arr[j][i] for j in range(len(arr))]
-        maximum += [max(temp)]
-        minimum += [min(temp)]
     copy = []
     for j in range(len(arr)):
-        copy.append([(arr[j][i] - minimum[i]) / (maximum[i] - minimum[i])
-                     for i in range(len(arr[j]))])
+        copy.append([log(arr[j][i] / arr[0][i]) for i in range(len(arr[j]))])
     return copy
 
 def plotting(x):
